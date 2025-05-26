@@ -1,36 +1,196 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Property pulse nextjs
 
-## Getting Started
+## This is my first NextJs Project and hence I am including my learning for future references
 
-First, run the development server:
+### Layout.jsx
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+In a Next.js application, the layout.jsx file is significant because it defines a shared layout for your application. It is part of the App Router introduced in Next.js 13, which uses the app directory for routing and layouts.
+
+Significance of layout.jsx
+S
+hared Layout:
+
+The layout.jsx **file wraps all pages and components within a specific route segment**. It allows you to define a consistent structure (e.g., headers, footers, sidebars) across multiple pages.
+Automatic Usage:
+
+Next.js automatically applies the layout defined in layout.jsx to all child routes within the same directory.
+Server Components:
+
+Layouts in the app directory are React Server Components by default, which improves performance by rendering on the server.
+Global Styles:
+
+You typically import global styles (like globals.css) in the layout.jsx file to ensure they are applied across the entire application.
+Can It Be Named Anything Else?
+No, the file must be named layout.jsx (or layout.tsx for TypeScript) for Next.js to recognize it as a layout file. This is a convention enforced by the framework when using the app directory.
+
+If you rename it to something else, Next.js will not treat it as a layout, and it will not work as expected. If you need multiple layouts, you can create additional layout.jsx files in different route segments within the app directory.
+
+## what is tailwind
+
+Tailwind CSS is a utility-first CSS framework that provides a set of pre-defined classes to build custom designs directly in your HTML or JSX. Instead of writing custom CSS, you use utility classes like text-center, bg-blue-500, or p-4 to style elements. It is highly customizable through a configuration file (tailwind.config.js) and promotes rapid development with consistent, reusable styles.
+
+## Files in Tailwind
+
+### tailwind.config.js
+
+This file, tailwind.config.js, is the configuration file for Tailwind CSS in your project. Here's a breakdown of its contents:
+
+content:
+
+    This specifies the paths to all files in your project where Tailwind CSS classes might be used.
+    It includes files in the pages and components directories with extensions .js, .ts, .jsx, and .tsx.
+
+t
+heme:
+
+    This section allows you to customize the default Tailwind CSS theme.
+
+    The extend property is used to add or override specific theme values without completely replacing the default theme.
+
+fontfamily:
+
+    Adds a custom font family named sans with "Poppins" as the primary font and "sans-serif" as the fallback.
+
+gridTemplateColumns:
+
+    Adds a custom grid column configuration named 70/30 with column widths of 70% and 28%.
+
+p
+lugins:
+
+    This is an array where you can add Tailwind CSS plugins to extend its functionality. Currently, it is empty.
+
+### globals.css
+
+The globals.css file you provided is a global stylesheet for your Next.js application. It uses Tailwind CSS, a utility-first CSS framework, to style your application. Here's what each line does:
+
+Purpose in the Project
+
+    This file ensures that Tailwind CSS is globally applied to your application.
+    It is typically imported in the \_app.js or layout.jsx file to apply these styles across all pages.
+
+### postcss.config.mjs
+
+The postcss.config.mjs file is used to configure PostCSS, a tool for transforming CSS with JavaScript plugins. In your project, it is specifically configured to work with Tailwind CSS.
+
+Use in Your Project:
+Tailwind CSS Integration:
+
+    The file specifies the plugins that PostCSS should use. In your case, it includes @tailwindcss/postcss, which processes Tailwind's directives (@tailwind base;, @tailwind components;, @tailwind utilities;) in your CSS files.
+
+CSS Transformation:
+
+    PostCSS processes your CSS files and applies transformations like adding vendor prefixes (via autoprefixer) or optimizing the CSS for production.
+
+Build Process:
+
+    When you run your development or build scripts (e.g., npm run dev or npm run build), PostCSS uses this configuration to process your CSS files.
+
+Current Configuration:
+
+    This configuration tells PostCSS to use the @tailwindcss/postcss plugin to transform your css file.
+
+### What is the use of "export default"
+
+    In JavaScript, export default is used to export a single value, function, or class from a module so it can be imported elsewhere in your application. It allows you to define a default export for the module, which can be imported without using curly braces.
+
+    In the Context of layout.jsx:
+        In your layout.jsx file, the export default MainLayout; statement exports the MainLayout component as the default export of the file. This means that when another file imports from layout.jsx, it will receive the MainLayout component by default.
+
+        If you want to use the MainLayout component in another file, you can import it like this:
+
+        ```text import MainLayout from './layout' ```
+
+### Favicon
+
+Adding an image with the name favicon.ico within app folder creates a favicon for the site.
+
+### Metadata from layout file and how does Net.js use it
+
+How Next.js Uses Metadata:
+Automatic Integration:
+
+When you export a metadata object from a layout.jsx file, Next.js automatically applies it to the <head> section of the HTML for all pages that use that layout.
+Dynamic Metadata:
+
+You can define metadata dynamically for specific layouts or pages. For example, you can set a unique title or description for different sections of your app.
+SEO and Social Sharing:
+
+Metadata like title, description, and keywords are used by search engines and social media platforms to display information about your site.
+Hierarchical Application:
+
+Metadata defined in a layout.jsx file applies to all child routes within that layout. If a child route defines its own metadata, it will override or extend the parent layout's metadata.
+
+### File Based Routing in Next.js
+
+Next.js file-based routing is a system where the structure of the pages or app directory defines the routes of your application. Here's a summary:
+
+File-to-Route Mapping:
+
+    Each file in the pages or app directory corresponds to a route.
+    For example, page.jsx maps to /, and page.jsx maps to /properties.
+
+Dynamic Routes:
+
+    Files or folders with square brackets ([id]) define dynamic routes.
+    For example, page.jsx maps to /properties/:id, where :id is a dynamic segment.
+
+Nested Routes:
+
+    Subfolders create nested routes.
+    For example, page.jsx maps to /properties/add.
+
+Layouts:
+
+    The layout.jsx file in a folder defines a shared layout for all routes within that folder.
+
+Special Files:
+
+    page.jsx: Defines the main content for a route.
+    layout.jsx: Defines a shared layout for nested routes.
+    error.jsx: Handles errors for a route.
+
+This system simplifies routing by using the file structure to define routes automatically, without needing a separate configuration.
+
+### Client Vs Server Component
+
+Client components are rendered on the browser and Server components on the server. Refer to ClientVsServer.jpg in the assests folder.
+
+A Component is converted to a client component by using 'use client' at the top of the component.
+
+/app/properties/[slug]/page.jsx - shows server component that retrieves pathparam and searchParam (query param)
+
+/app/properties/clientRendered/[id]/page.jsx - shows a class that is rendered on the client and how to extract path param / path name etc - uses hooks.
+
+### usePathname
+
+The usePathname hook from next/navigation in Next.js is used to retrieve the current URL path of the application. It is particularly useful in client-side components for tasks like:
+
+Active Link Highlighting:
+
+You can use usePathname to determine the current route and apply styles or classes to indicate the active page in a navigation menu.
+Conditional Rendering:
+
+Based on the current path, you can conditionally render components or content.
+Dynamic Behavior:
+
+It helps in implementing dynamic behaviors that depend on the current route, such as showing or hiding elements.
+
+```javascript
+import { usePathname } from "next/navigation";
+
+const Navbar = () => {
+  const pathname = usePathname();
+
+  return (
+    <nav>
+      <a href="/" className={pathname === "/" ? "active" : ""}>
+        Home
+      </a>
+      <a href="/about" className={pathname === "/about" ? "active" : ""}>
+        About
+      </a>
+    </nav>
+  );
+};
 ```
-
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
