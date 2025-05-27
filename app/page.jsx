@@ -1,11 +1,17 @@
 import Hero from "@/components/Hero";
 import InfoBoxes from "@/components/InfoBoxes";
 import Link from "next/link";
+import connectDB from "@/config/database";
 
 // This is the main page of your application
 // It serves as the entry point for your app
 // Link is used to create client-side navigation between pages and uses client-side routing
 const HomePage = () => {
+  // Connect to the database
+  connectDB().catch((error) => {
+    console.error("Database connection error:", error);
+  });
+  console.log(process.env.MONGODB_URI);
   // return ( <div className="text-2xl">
   //     <h1 className="text-3xl font-bold underline">
   //         Hello world!
