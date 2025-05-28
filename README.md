@@ -194,3 +194,36 @@ const Navbar = () => {
   );
 };
 ```
+
+### Next JS Image Tag - sizes property
+
+“which image size the browser downloads” in the context of the Next.js <Image /> component:
+
+#### How Next.js <Image /> Works
+
+When you use the <Image /> component, Next.js can automatically generate and serve multiple versions (different sizes) of your image.
+The browser then chooses the most appropriate image size to download based on the device’s screen size and the sizes prop you provide.
+
+#### Why Does This Matter?
+
+Performance: Smaller devices (like phones) don’t need huge images, so the browser can download a smaller, faster-loading version.
+Quality: Larger screens (like desktops) can get a higher-resolution image for better quality.
+
+#### Example
+
+Suppose you have a single image file (e.g., a1.jpg). Next.js, behind the scenes, can create several versions of this image at different widths (e.g., 400px, 800px, 1200px wide).
+
+If a user visits your site on a phone, the browser will download the 400px version.
+If a user visits on a large desktop, the browser might download the 1200px version.
+This is controlled by the sizes prop and the browser’s logic.
+
+In Your Code
+You have:
+
+> sizes="100vw" tells the browser: “This image will always be as wide as the viewport.”
+> Next.js provides the browser with a list of available image widths.
+> The browser picks the best one for the current device and screen size.
+> You only need to provide one image file. Next.js handles the rest!
+
+Summary:
+You provide one image, but Next.js and the browser work together to serve the best-sized version for each user, improving speed and quality automatically. You don’t have to manually create or manage multiple image files.
