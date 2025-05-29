@@ -2,6 +2,16 @@
 
 ## This is my first NextJs Project and hence I am including my learning for future references
 
+### Models
+
+In Next.js, models are typically used to define the structure of data that your application will work with. They can represent entities such as users, properties, or any other domain-specific objects. Models help in organizing and validating data, especially when interacting with databases or APIs.
+
+MongoDB Models:
+In the context of a Next.js application using MongoDB, models are often defined using Mongoose, an ODM (Object Data Modeling) library for MongoDB and Node.js. Mongoose allows you to define schemas for your data, which can include fields, types, validation rules, and methods.
+
+mongoose.models is Mongoose model cache. It stores all the models that have been defined in your application. When you define a model using mongoose.model('ModelName', schema), it gets added to this cache.
+This allows you to reuse the same model without redefining it, which is particularly useful in serverless environments like Next.js where the same code may run multiple times.
+
 ### Layout.jsx
 
 In a Next.js application, the layout.jsx file is significant because it defines a shared layout for your application. It is part of the App Router introduced in Next.js 13, which uses the app directory for routing and layouts.
@@ -31,7 +41,7 @@ Tailwind CSS is a utility-first CSS framework that provides a set of pre-defined
 
 ## Files in Tailwind
 
-### tailwind.config.js
+### tailwind.config.js - Deprecated as of Tailwind CSS v4 ( all of the configurations are now in globals.css under @theme)
 
 This file, tailwind.config.js, is the configuration file for Tailwind CSS in your project. Here's a breakdown of its contents:
 
@@ -40,8 +50,7 @@ content:
     This specifies the paths to all files in your project where Tailwind CSS classes might be used.
     It includes files in the pages and components directories with extensions .js, .ts, .jsx, and .tsx.
 
-t
-heme:
+theme:
 
     This section allows you to customize the default Tailwind CSS theme.
 
@@ -55,8 +64,7 @@ gridTemplateColumns:
 
     Adds a custom grid column configuration named 70/30 with column widths of 70% and 28%.
 
-p
-lugins:
+plugins:
 
     This is an array where you can add Tailwind CSS plugins to extend its functionality. Currently, it is empty.
 
@@ -194,3 +202,52 @@ const Navbar = () => {
   );
 };
 ```
+
+### Next JS Image Tag - sizes property
+
+“which image size the browser downloads” in the context of the Next.js <Image /> component:
+
+#### How Next.js <Image /> Works
+
+When you use the <Image /> component, Next.js can automatically generate and serve multiple versions (different sizes) of your image.
+The browser then chooses the most appropriate image size to download based on the device’s screen size and the sizes prop you provide.
+
+#### Why Does This Matter?
+
+Performance: Smaller devices (like phones) don’t need huge images, so the browser can download a smaller, faster-loading version.
+Quality: Larger screens (like desktops) can get a higher-resolution image for better quality.
+
+#### Example
+
+Suppose you have a single image file (e.g., a1.jpg). Next.js, behind the scenes, can create several versions of this image at different widths (e.g., 400px, 800px, 1200px wide).
+
+If a user visits your site on a phone, the browser will download the 400px version.
+If a user visits on a large desktop, the browser might download the 1200px version.
+This is controlled by the sizes prop and the browser’s logic.
+
+In Your Code
+You have:
+
+> sizes="100vw" tells the browser: “This image will always be as wide as the viewport.”
+> Next.js provides the browser with a list of available image widths.
+> The browser picks the best one for the current device and screen size.
+> You only need to provide one image file. Next.js handles the rest!
+
+Summary:
+You provide one image, but Next.js and the browser work together to serve the best-sized version for each user, improving speed and quality automatically. You don’t have to manually create or manage multiple image files.
+
+## Routes / exposing apis in Next.js
+
+Exposing APIs in Next.js is done through the API routes feature. API routes allow you to create serverless functions that can handle HTTP requests and responses, making it easy to build backend functionality within your Next.js application.
+
+### How to Create API Routes
+
+1. **Create an API Directory**: Inside the `app` directory, create a folder named `api`. This is where all your API routes will reside.
+2. **Define API Routes**: Inside the `api` folder, create files that represent your API endpoints. Each file corresponds to a route. For example:
+
+   - `app/api/users/route.js` for `/api/users`
+   - `app/api/products/route.js` for `/api/products`
+
+3. **Export a Function**: In each route file, export a function that handles the request and response. This function can handle different HTTP methods like GET, POST, PUT, DELETE, etc.
+
+Reference the `app/api/properties/route.js` file in the project for an example of how to define an API route.
