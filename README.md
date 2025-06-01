@@ -251,3 +251,44 @@ Exposing APIs in Next.js is done through the API routes feature. API routes allo
 3. **Export a Function**: In each route file, export a function that handles the request and response. This function can handle different HTTP methods like GET, POST, PUT, DELETE, etc.
 
 Reference the `app/api/properties/route.js` file in the project for an example of how to define an API route.
+
+## Authentication in Next.js
+
+We use Next Auth for authentication in Next.js applications. Next Auth is a flexible and easy-to-use authentication solution that integrates seamlessly with Next.js.
+
+### What is Next Auth?
+
+Next Auth is a library for Next.js that provides authentication and authorization features. It supports various authentication providers (like Google, Facebook, GitHub, etc.) and allows you to manage user sessions easily.
+It uses Serverless functions to handle authentication requests, making it suitable for serverless environments like Vercel.
+
+### HOw does Next Auth use Serverless Functions?
+
+Next Auth uses serverless functions to handle authentication requests, such as signing in, signing out, and managing user sessions. When a user interacts with the authentication flow (e.g., clicking "Sign in with Google"), Next Auth triggers a serverless function that processes the request.
+This function can handle tasks like redirecting the user to the authentication provider, verifying credentials, and managing user sessions.
+
+#### But Why Serverless Functions?
+
+Serverless functions are ideal for authentication because they can scale automatically, handle requests quickly, and reduce server management overhead. They allow you to focus on building your application without worrying about server infrastructure.
+
+### Does Next Auth create serverless functions?
+
+Yes, Next Auth creates serverless functions for handling authentication requests. When you set up Next Auth in your Next.js application, it automatically generates API routes that act as serverless functions to manage the authentication flow.
+
+### An highlevel ovrview / flow of how Next Auth works with sessions
+
+1. **User Initiates Authentication**: The user clicks a "Sign in" button, which triggers a request to the Next Auth API route (e.g., `/api/auth/signin`).
+2. **Redirect to Provider**: Next Auth redirects the user to the chosen authentication provider (e.g., Google, GitHub) for login.
+3. **User Authenticates**: The user logs in on the provider's site and grants permission to your application.
+4. **Callback to Next Auth**: After successful authentication, the provider redirects the user back to a callback URL defined in your Next Auth configuration (e.g., `/api/auth/callback/google`).
+5. **Session Creation**: Next Auth processes the callback, verifies the user's credentials, and creates a session for the user.
+6. **Session Storage**: The session information is stored in a secure cookie or database, depending on your Next Auth configuration.
+7. **User Accesses Protected Routes**: When the user accesses protected routes in your application, Next Auth checks the session to determine if the user is authenticated.
+8. **Session Management**: Next Auth provides methods to manage the session, such as checking if a user is authenticated, signing out, or refreshing the session.
+
+### SignIn and SignOut process within the application.
+
+1. app/api/auth/[...nextauth]]/route.js: This route handles the authentication logic for Next Auth.
+2. utils/authOptions.js: This file contains the configuration options for Next Auth, including providers, callbacks, and session management. In our case, it uses Google as the authentication provider.
+3. components/AuthProvider.jsx: This component wraps the application with the Next Auth session provider, allowing access to authentication state throughout the app.
+4. layout.jsx: This file includes the AuthProvider component to ensure that authentication state is available in all pages.
+5. components/Navbar.jsx: This component displays the navigation bar, including the sign-in and sign-out buttons. It uses the useSession hook from Next Auth to check the authentication state and render appropriate buttons. it includes a useEffect hook to get the authentication provider and set the provider state which is used during signin process.

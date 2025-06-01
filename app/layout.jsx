@@ -1,6 +1,7 @@
 import Navbar from "@/components/Navbar";
 import "@/assets/styles/globals.css";
 import Footer from "@/components/Footer";
+import AuthProvider from "@/components/AuthProvider";
 
 // This layout component is used to wrap the entire application
 // It provides a consistent structure and styling across all pages
@@ -16,13 +17,15 @@ export const metadata = {
 // chikdren here represents the contents of page.jsx ( nex.js will automatically pass the contents of page.jsx to the layout component)
 const MainLayout = ({ children }) => {
   return (
-    <html lang="en">
-      <body>
-        <Navbar />
-        <main>{children}</main>
-        <Footer />
-      </body>
-    </html>
+    <AuthProvider>
+      <html lang="en">
+        <body>
+          <Navbar />
+          <main>{children}</main>
+          <Footer />
+        </body>
+      </html>
+    </AuthProvider>
   );
 };
 
