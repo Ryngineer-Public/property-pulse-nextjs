@@ -1,5 +1,6 @@
 // This is a server component
 import PropertyHeaderImage from "@/components/PropertyHeaderImage";
+import PropertyImage from "@/components/PropertyImage";
 import connectDB from "@/config/database";
 import Property from "@/models/Property";
 import Link from "next/link";
@@ -26,21 +27,21 @@ const ServerPropertyPage = async (props) => {
             href="/properties"
             className="text-blue-500 hover:text-blue-600 flex items-center"
           >
-            <FaArrowLeft className="mr-2"/>Back to Properties
+            <FaArrowLeft className="mr-2" />
+            Back to Properties
           </Link>
         </div>
       </section>
-       <section className="bg-blue-50">
-      <div className="container m-auto py-10 px-6">
-        <div className="grid grid-cols-1 md:grid-cols-70/30 w-full gap-6">
-        <PropertyDetails property={property}/>
-        </div>
+      <section className="bg-blue-50">
+        <div className="container m-auto py-10 px-6">
+          <div className="grid grid-cols-1 md:grid-cols-70/30 w-full gap-6">
+            <PropertyDetails property={property} />
+          </div>
         </div>
       </section>
-      <section>{property.name}</section>
+      <PropertyImage images={property.images} />
     </>
-  )
-
-}
+  );
+};
 
 export default ServerPropertyPage;

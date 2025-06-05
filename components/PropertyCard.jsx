@@ -12,7 +12,13 @@ const PropertyCard = ({ property }) => {
   return (
     <div className="bg-white rounded-xl shadow-md relative flex flex-col md:flex-row">
       <Image
-        src={`/images/properties/${property.images[0]}`}
+        src={
+          property.images && property.images[0]
+            ? property.images[0].startsWith("https")
+              ? property.images[0]
+              : `/images/properties/${property.images[0]}`
+            : "/images/properties/default.jpg"
+        }
         alt={property.name}
         width="0"
         height="0"

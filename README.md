@@ -292,3 +292,105 @@ Yes, Next Auth creates serverless functions for handling authentication requests
 3. components/AuthProvider.jsx: This component wraps the application with the Next Auth session provider, allowing access to authentication state throughout the app.
 4. layout.jsx: This file includes the AuthProvider component to ensure that authentication state is available in all pages.
 5. components/Navbar.jsx: This component displays the navigation bar, including the sign-in and sign-out buttons. It uses the useSession hook from Next Auth to check the authentication state and render appropriate buttons. it includes a useEffect hook to get the authentication provider and set the provider state which is used during signin process.
+
+## next.config.mjs
+
+The next.config.mjs file is a configuration file for Next.js applications. It allows you to customize various aspects of your Next.js project, such as enabling experimental features, configuring image optimization, and setting up environment variables.
+
+### Purpose in the Project
+
+Next.js requires you to specify allowed hostnames for remote images (like in your images.remotePatterns config) for security and performance reasons:
+
+Security:
+Allowing only specific hostnames prevents malicious sites from serving harmful or unexpected images through your app. This helps protect users from attacks like phishing or cross-site scripting (XSS) via image URLs.
+
+Performance:
+Next.js optimizes images (resizing, caching, etc.) at build or runtime. By restricting hostnames, it avoids unnecessary processing of images from unknown or unreliable sources, which could slow down your app or increase server costs.
+
+Control:
+You maintain control over which external sources your app trusts for images, reducing the risk of broken images or unexpected content changes.
+
+Gotcha:
+If you forget to add a hostname, images from that source won’t load, and you’ll see an error in the browser console.
+
+Example:
+Your config allows images only from lh3.googleusercontent.com over HTTPS. Any other remote image source will be blocked by Next.js.
+
+## middleware.js
+
+The middleware.js file in a Next.js application is used to define custom middleware functions that can run before requests are processed by the application. Middleware allows you to perform actions like authentication, logging, or modifying requests and responses.
+
+### Purpose in the Project
+
+In our project middleware.js is used to determine if a user is authenticated before allowing access to certain routes. It checks the session and redirects unauthenticated users to the sign-in page.
+paths defined in the matcher property specify which routes the middleware should apply to. In this case, it applies to all routes except for the sign-in page and the API routes.
+
+### How It Works
+
+1. **Session Check**: The middleware checks if a user session exists using the getServerSession function from Next Auth.
+2. **Redirection**: If the session does not exist, it redirects the user to the sign-in page (e.g., /signin).
+3. **Allowed Paths**: The middleware allows access to certain paths (like /signin and /api/auth) without authentication, so users can sign in or access public APIs.
+
+## Next JS Action
+
+In Next.js, actions are used to handle form submissions and other server-side logic. They allow you to define functions that can be called from the client side to perform operations like creating, updating, or deleting data.
+
+### Purpose in the Project
+
+In our project, actions are used to handle form submissions for creating and updating properties. They allow us to perform server-side operations like saving data to the database without needing to write separate API routes.
+
+### How It Works
+
+1. **Define Action Functions**: In the properties folder, we define action functions (e.g., createPropertyAction) that handle the logic for creating or updating properties.
+   you can retrieve form data using formData.get('fieldName') to access specific fields from the submitted form.
+2. **Use Action in Form**: In the form component, we use the action function to handle the form submission. When the form is submitted, it calls the action function with the form data.
+3. **Server-Side Execution**: The action function runs on the server, allowing us to access server-side resources like the database or session information.
+
+## Utilities
+
+### utils/getSessionUser.js
+
+The getSessionUser function is a utility function that retrieves the currently authenticated user from the session in a Next.js application using Next Auth. It is typically used to access user information in server-side components or API routes.
+
+## Constructs
+
+### revalidatePath function used in addProperty.js
+
+The revalidatePath function in Next.js is used to trigger a revalidation of a specific path, allowing you to refresh the data for that path without needing to reload the entire page. This is particularly useful in scenarios where you want to update the content of a page after performing an action, such as creating or updating data.
+
+### Purpose in the Project
+
+In our project, revalidatePath is used after creating or updating a property to ensure that the page displaying the list of properties is refreshed with the latest data. This allows users to see the changes immediately without having to manually refresh the page.
+
+### How It Works
+
+1. **Import the Function**: Import revalidatePath from next/cache in the file where you want to use it.
+
+```javascript
+import { revalidatePath } from "next/cache";
+```
+
+2. **Call the Function**: After performing an action (like creating or updating a property), call revalidatePath with the path you want to refresh. For example:
+
+```javascript
+revalidatePath('/',"layout');
+```
+
+The above code will trigger a revalidation of the root path (/) and the layout, ensuring that any data fetched for that path is updated.
+layout argument is passed to ensure that the layout is also revalidated, which is important if the layout contains navigation or other components that depend on the latest data.
+
+## Why 'use client' within error.jsx and not in notFound.jsx
+
+In Next.js (especially with the App Router), the "use client" directive at the top of a file tells Next.js to treat that component as a client component—meaning it will be rendered on the client side, not just the server.
+
+### Why "use client" for error.jsx?
+
+    Error boundaries in Next.js (using error.jsx) often need to handle client-side errors, such as those thrown during rendering or in event handlers.
+    If you want to use React hooks (like useEffect, useState) or interact with the browser (e.g., showing a toast, logging to a client-side service), you must mark the component as a client component.
+    Some error UI (like using react-icons or other client-only libraries) may require client-side rendering.
+
+### Why not for not-found.jsx?
+
+    The not-found.jsx file is used for handling 404 pages. It's typically rendered only on the server when a route doesn't exist.
+    It usually just displays a static message, so it doesn't need client-side interactivity or hooks.
+    By default, Next.js treats not-found.jsx as a server component, which is more efficient for static content.

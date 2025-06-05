@@ -11,7 +11,7 @@ import { signIn, signOut, useSession, getProviders } from "next-auth/react";
 const Navbar = () => {
   // rename the data to session to make it more readable
   const { data: session } = useSession();
-  console.log("Session Data:", session);
+  const profileImage = session?.user?.image || ProfileDefault;
 
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
@@ -23,12 +23,12 @@ const Navbar = () => {
   // This function is called when the component mounts to fetch the authentication providers
   useEffect(() => {
     // getProviders is a function from next-auth that retrieves the authentication providers configured in the application.
-    const getProvider = async () => {
-      const providers = await getProviders();
-      setProviders(providers);
+    const setAuthProviders = async () => {
+      const res = await getProviders();
+      setProviders(res);
     };
 
-    getProvider();
+    setAuthProviders();
   }, []);
 
   return (
@@ -171,8 +171,10 @@ const Navbar = () => {
                     <span className="sr-only">Open user menu</span>
                     {/* use a Image component and the src points to the variable holding the png above */}
                     <Image
-                      src={ProfileDefault}
+                      src={profileImage}
                       className="h-8 w-8 rounded-full"
+                      width={40}
+                      height={40}
                       alt=""
                     />
                   </button>
@@ -208,6 +210,10 @@ const Navbar = () => {
                     </Link>
 
                     <button
+                      onClick={() => {
+                        setIsProfileMenuOpen(false);
+                        signOut();
+                      }}
                       className="block px-4 py-2 text-sm text-gray-700"
                       role="menuitem"
                       tabIndex="-1"
