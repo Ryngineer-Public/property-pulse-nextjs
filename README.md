@@ -394,3 +394,63 @@ In Next.js (especially with the App Router), the "use client" directive at the t
     The not-found.jsx file is used for handling 404 pages. It's typically rendered only on the server when a route doesn't exist.
     It usually just displays a static message, so it doesn't need client-side interactivity or hooks.
     By default, Next.js treats not-found.jsx as a server component, which is more efficient for static content.
+
+## Setting up MongoDB Locally
+
+To set up MongoDB locally for your Next.js project, you can use Docker to run a MongoDB container. This allows you to easily manage your database without needing to install MongoDB directly on your machine.
+
+### Download Mongo Image
+
+To run MongoDB locally, you can use Docker to pull the official MongoDB image. Open your terminal and run the following command:
+
+```bash
+docker pull mongo
+```
+
+### Run MongoDB Container
+
+Once the image is downloaded, you can run a MongoDB container with the following command:
+
+Navigate to `cd C:\PersonalSpace\Projects\NextJs\mongo-store` or your desired directory where you want to store MongoDB data.
+
+```bash
+
+
+docker run -d --name my-mongo -p 27017:27017 -v ./mongo-data:/data/db -e MONGO_INITDB_ROOT_USERNAME=admin -e MONGO_INITDB_ROOT_PASSWORD=adminpassword mongo
+```
+
+This command does the following:
+
+- `-d`: Runs the container in detached mode (in the background).
+- `--name my-mongo`: Names the container "my-mongo".
+- `-p 27017:27017`: Maps port 27017 on your host to port 27017 in the container (the default MongoDB port).
+- `-v ./mongo-data:/data/db`: Mounts a volume to persist MongoDB data on your host machine (you can change the path as needed).
+- `-e MONGO_INITDB_ROOT_USERNAME=admin`: Sets the root username for MongoDB.
+- `-e MONGO_INITDB_ROOT_PASSWORD=adminpassword`: Sets the root password for MongoDB.
+
+### Connect to MongoDB using MongoDB Compass
+
+1. Open MongoDB Compass.
+2. In the "New Connection" dialog, enter the following connection string:
+
+```mongodb://admin:adminpassword@localhost:27017/mydatabase?authSource=admin
+
+```
+
+3. Click "Connect" to establish a connection to your local MongoDB instance.
+
+4. Create a new database named `propertypulse` by clicking on "Create Database" and entering the name.
+5. Create a collection named `properties` within the `propertypulse` database.
+
+### Create a User for the collection
+
+1. Run the following command in the MongoDB shell to create a user for your collection:
+
+```bash
+use propertypulse
+db.createUser({
+  user: "appuser",
+  pwd: "apppassword",
+  roles: [{ role: "readWrite", db: "propertypulse" }]
+})
+```
