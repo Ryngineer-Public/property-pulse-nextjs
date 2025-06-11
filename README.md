@@ -341,7 +341,7 @@ In our project, actions are used to handle form submissions for creating and upd
 
 ### How It Works
 
-1. **Define Action Functions**: In the properties folder, we define action functions (e.g., createPropertyAction) that handle the logic for creating or updating properties.
+1. **Define Action Functions**: In the properties folder, we define action functions (e.g., addProperty) that handle the logic for creating or updating properties.
    you can retrieve form data using formData.get('fieldName') to access specific fields from the submitted form.
 2. **Use Action in Form**: In the form component, we use the action function to handle the form submission. When the form is submitted, it calls the action function with the form data.
 3. **Server-Side Execution**: The action function runs on the server, allowing us to access server-side resources like the database or session information.
@@ -381,7 +381,7 @@ layout argument is passed to ensure that the layout is also revalidated, which i
 
 ## Why 'use client' within error.jsx and not in notFound.jsx
 
-In Next.js (especially with the App Router), the "use client" directive at the top of a file tells Next.js to treat that component as a client component—meaning it will be rendered on the client side, not just the server.
+In Next.js (especially with the App Router), the "use client" directive at the top of a file tells Next.js to treat that component as a client component—meaning it will be rendered on the client side, not the server.
 
 ### Why "use client" for error.jsx?
 
@@ -395,9 +395,52 @@ In Next.js (especially with the App Router), the "use client" directive at the t
     It usually just displays a static message, so it doesn't need client-side interactivity or hooks.
     By default, Next.js treats not-found.jsx as a server component, which is more efficient for static content.
 
+### Client vs. Server Components
+
+Server Components and Client Components are two types of React components in Next.js (especially with the App Router):
+
+Server Components
+Default in Next.js app directory.
+Rendered on the server (Node.js), not in the browser.
+Can access server-side resources directly (like databases, file system, environment variables).
+Cannot use React hooks that require the browser (like useState, useEffect).
+Do not increase client-side JavaScript bundle size.
+Syntax: No special directive needed.
+
+Client Components
+Rendered on the client (browser).
+Can use browser-only APIs and React hooks (useState, useEffect, etc.).
+Needed for interactivity (forms, modals, event handlers).
+Must include "use client" at the top of the file.
+Increase client-side JavaScript bundle size.
+
+### Why use a client component?
+
+#### Interactivity:
+
+Client components allow you to use React hooks like useState, useEffect, and useContext to manage local state, handle user events, and perform side effects in the browser.
+
+#### Browser APIs:
+
+You can access browser-specific features (like window, document, localStorage, geolocation, etc.) that are not available on the server.
+
+#### Dynamic UI:
+
+Components that need to update in response to user actions (forms, modals, dropdowns, tabs, etc.) must be client components.
+
+#### Third-party libraries:
+
+Many UI libraries (like Material UI, React Bootstrap, or charting libraries) require client-side rendering and hooks.
+
 ## Setting up MongoDB Locally
 
 To set up MongoDB locally for your Next.js project, you can use Docker to run a MongoDB container. This allows you to easily manage your database without needing to install MongoDB directly on your machine.
+
+### Server Functions
+
+A Server Function is a function that executes on the server. In Next.js these functions can be invoked from client components.. When the framework builds your application, it passes a reference of the server function to the client component. When the client conmponent calls the server function, it sends a http request to the server by serializing the request params and if the server function returns data that is also serialized.
+
+Eg : Server actions within PropertyEditForm.jsx. The action function invokes a server function that is marked as a server function.
 
 ### Download Mongo Image
 
@@ -453,4 +496,33 @@ db.createUser({
   pwd: "apppassword",
   roles: [{ role: "readWrite", db: "propertypulse" }]
 })
+```
+
+### Notification using Toastify
+
+Toastify is a lightweight JavaScript library for creating toast notifications in web applications. It provides a simple way to display messages to users, such as success, error, or informational notifications.
+
+### How to Use Toastify in Your Next.js Project
+
+1. **Install Toastify**: First, you need to install the Toastify library in your Next.js project. You can do this using npm or yarn:
+
+```bash
+npm install react-toastify
+```
+
+2. **Import Toastify**: In the component where you want to use notifications, import the necessary components from Toastify
+
+Refer Layout.jsx for an example of how to import Toastify and its CSS styles. 3. **Initialize Toastify**: In your component, you can use the `toast` function to create notifications. For example, you can show a success message after a successful form submission or an error message if something goes wrong.
+
+```javascript
+import { toast } from "react-toastify";
+const handleSubmit = async (data) => {
+  try {
+    // Perform your form submission logic here
+    await submitForm(data);
+    toast.success("Property added successfully!");
+  } catch (error) {
+    toast.error("Failed to add property. Please try again.");
+  }
+};
 ```

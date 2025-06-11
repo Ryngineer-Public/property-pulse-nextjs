@@ -16,7 +16,23 @@ const ServerPropertyPage = async (props) => {
 
   await connectDB();
 
-  const property = await Property.findById(params.slug).lean();
+  const { slug } = await params;
+
+  const property = await Property.findById(slug).lean();
+
+  if (!property) {
+    return (
+      <div className="container m-auto py-10 px-6">
+        <h1 className="text-center text-2xl font-bold text-red-500">
+          Property not found
+        </h1>
+        <Link href="/properties" className="text-blue-500 hover:text-blue-600">
+          <FaArrowLeft className="mr-2" />
+          Back to Properties
+        </Link>
+      </div>
+    );
+  }
 
   return (
     <>
