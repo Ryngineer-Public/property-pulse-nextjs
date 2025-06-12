@@ -379,9 +379,22 @@ revalidatePath('/',"layout');
 The above code will trigger a revalidation of the root path (/) and the layout, ensuring that any data fetched for that path is updated.
 layout argument is passed to ensure that the layout is also revalidated, which is important if the layout contains navigation or other components that depend on the latest data.
 
+### Significance of second argument in revalidatePath
+
+The second argument in revalidatePath("/properties/saved", "page"); specifies the type of cache to revalidate.
+
+In Next.js (especially with the App Router), revalidatePath is used to trigger a revalidation of cached data for a specific path. The second argument can be:
+
+"page": Revalidates the cache for the entire page at the given path.
+"layout": Revalidates the cache for the layout at the given path.
+So, in your code, "page" tells Next.js to revalidate the cached page at /properties/saved, ensuring users see the latest data when they visit that route.
+
 ## Why 'use client' within error.jsx and not in notFound.jsx
 
 In Next.js (especially with the App Router), the "use client" directive at the top of a file tells Next.js to treat that component as a client component—meaning it will be rendered on the client side, not the server.
+
+NOTE : Event handlers (like onClick) and React hooks (like useState, useEffect) can only be used in client components. so if a component needs to use these features, it must be marked as a client component using the "use client" directive.
+If this component imports a function from a different file and the file is not marked with "use server", then the function is treated as client-side code, which can lead to issues if it contains server-only logic.
 
 ### Why "use client" for error.jsx?
 
@@ -394,6 +407,23 @@ In Next.js (especially with the App Router), the "use client" directive at the t
     The not-found.jsx file is used for handling 404 pages. It's typically rendered only on the server when a route doesn't exist.
     It usually just displays a static message, so it doesn't need client-side interactivity or hooks.
     By default, Next.js treats not-found.jsx as a server component, which is more efficient for static content.
+
+### "Use Server"
+
+Marking a component or an action as "use server" indicates that the function should be executed on the server side even if the function is imported into a client component.
+
+If a function is imported and invoked from a client component, and the file containing that function is not marked with "use server", then Next.js treats that function as client-side code.
+
+This means:
+
+- The function's code will be bundled and sent to the browser.
+- Any server-only logic (like database access or using environment variables) will fail or expose sensitive information.
+- To ensure a function runs only on the server (and is never sent to the client), you must mark the file or function with "use server". This is why your bookmarkProperty.js file starts with "use server";—so it is always executed on the server, even if called from a client component via a server action.
+
+Summary:
+
+No "use server" = function is client-side if imported into a client component.
+With "use server" = function is always server-side, safe for server-only logic.
 
 ### Client vs. Server Components
 
@@ -526,3 +556,15 @@ const handleSubmit = async (data) => {
   }
 };
 ```
+
+## MapBox
+
+Mapbox is a powerful mapping and location platform that provides APIs and SDKs for integrating maps, geocoding, and other location-based services into web and mobile applications. It allows developers to create custom maps, visualize data, and build location-aware applications.
+
+### How to Use Mapbox in Your Next.js Project
+
+1. **Sign Up for Mapbox**: Create an account on the Mapbox website and obtain an access token. This token is required to authenticate your requests to the Mapbox API.
+2. **Install Mapbox GL JS**: You can install the Mapbox GL JS library in your Next.js project using npm or yarn:
+3. **Install react-map-gl**: This is a React wrapper for Mapbox GL JS, making it easier to use in React applications. Install it using npm or yarn:
+4. **Import Mapbox Components**: In your Next.js component, import the necessary Mapbox components and styles. For example, you can create a map component that displays a map centered on a specific location.
+   Reference PropertyMap.jsx for an example of how to use Mapbox in your project.
