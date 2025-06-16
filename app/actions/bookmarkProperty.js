@@ -20,7 +20,7 @@ async function bookmarkProperty(propertyId) {
     throw new Error("User not found");
   }
   // Check if the property is already bookmarked
-  const isBookmarked = userRecord.favorites.includes(propertyId);
+  let isBookmarked = userRecord.favorites.includes(propertyId);
 
   let message;
   if (isBookmarked) {
@@ -29,10 +29,12 @@ async function bookmarkProperty(propertyId) {
       (id) => id.toString() !== propertyId.toString()
     );
     message = "Property removed from bookmarks.";
+    isBookmarked = false;
   } else {
     // If not bookmarked, add it
     userRecord.favorites.push(propertyId);
     message = "Property added to bookmarks.";
+    isBookmarked = true;
   }
 
   await userRecord.save();

@@ -568,3 +568,27 @@ Mapbox is a powerful mapping and location platform that provides APIs and SDKs f
 3. **Install react-map-gl**: This is a React wrapper for Mapbox GL JS, making it easier to use in React applications. Install it using npm or yarn:
 4. **Import Mapbox Components**: In your Next.js component, import the necessary Mapbox components and styles. For example, you can create a map component that displays a map centered on a specific location.
    Reference PropertyMap.jsx for an example of how to use Mapbox in your project.
+
+## UseSession
+
+The useSession hook from Next Auth is used to access the current user's session information in a Next.js application. It provides an easy way to check if a user is authenticated and retrieve their profile data.
+
+### Purpose in the Project
+
+In our project, useSession is used to determine if a user is logged in and to access their profile information. This allows us to conditionally render components based on the user's authentication status, such as showing the user's name or profile picture in the navigation bar.
+useSession hook is triggered every time the session changes causing the component to re-render with the latest session data. This is useful for displaying real-time updates to the user interface based on the user's authentication state.
+
+### Use within the Project
+
+We are using it it BookmarkButton.jsx to check if the user is authenticated before allowing them to bookmark a property. It is also used within the useEffect hook to fetch the users book marked properties when the component mounts.
+
+### Populate function
+
+```javascript
+const { favorites: bookmarks } = await User.findById(id).populate("favorites");
+```
+
+The populate function in Mongoose is used to replace the specified paths in the document with documents from other collections. It allows you to perform a join-like operation between collections, enabling you to retrieve related data in a single query.
+In the provided code, the populate function is used to retrieve the favorites (bookmarked properties) of a user by populating the favorites field with the corresponding Property documents. This allows you to access the full details of each bookmarked property instead of just their IDs.
+We are also destructuring the favorites field from the User document to get just the bookmarks directly.
+It replaces the Ids with the actual Property Document when you use property.populate("favorites") in the User model.
